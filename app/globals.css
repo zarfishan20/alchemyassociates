@@ -1,14 +1,16 @@
 @import "tailwindcss";
 @theme {
   /* FlexiPay Systems - Brand Palette */
-  --color-brand-primary:#c5a47e; /* Teal - Use for Headers/Nav */
-  --color-brand-surface: #c5a47e; /* Light Grey - Use for Section Backgrounds */
-  --color-brand-text: #0f172a;;    /* Dark Navy - Use for All Primary Text */
+  --color-brand-primary: #db6164;   /* Primary Purple (buttons, headers) */
+  --color-brand-surface: #f5f5f5;  /* Background (light grey) */
+  --color-brand-text: #6c5f8a;  /* Coral (CTAs, highlights, hover) */
   
   /* Additional Utility Colors based on your set */
-  --color-brand-accent: #c5a47e;   /* A slightly darker Teal for button hovers */
-  --color-brand-muted:  #c5a47e;    /* Muted Teal for subtext */
+  --color-brand-accent: #db6164;   /* Coral (CTAs, highlights, hover) */
+  --color-brand-muted:  #8b8b8b;    /* Subtext / secondary text */
 }
+
+  
 
 /* Base styles for the whole site */
 :root {

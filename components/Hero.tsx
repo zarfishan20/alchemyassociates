@@ -42,7 +42,7 @@ export default function Hero() {
             variants={slideIn("left", 0.1)}
             className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary mb-6 block"
           >
-            M&M Accounts & Taxation
+          Alchemy Associates
           </motion.span>
 
           {/* Headline - Slides in from left with slight delay */}
@@ -123,7 +123,7 @@ Expert Accounting <span className="text-brand-primary italic">& Taxation Service
               </p>
               <div className="flex flex-col text-[10px] font-black uppercase text-brand-primary tracking-widest">
                 <span>Shahid Shah</span>
-                <span className="text-white/40">Founder, M&M Accounts & Taxation</span>
+                <span className="text-white/40">Founder, Alchemy Assoicates</span>
               </div>
             </motion.div>
 

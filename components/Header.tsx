@@ -29,7 +29,7 @@ export default function Header() {
           <div className="relative w-14 h-14 md:w-16 md:h-16">
             <Image
               src="/logo.png"
-              alt="M&M Accounts & Taxation logo"
+              alt="alchemy associates logo"
               fill
               className="object-contain"
             />
@@ -37,10 +37,10 @@ export default function Header() {
 
           <div className="leading-none">
             <span className="block text-brand-text uppercase font-black text-3xl md:text-4xl">
-              M&M
+              Alchemy
             </span>
             <span className="block text-brand-primary font-light text-sm md:text-base">
-              Accounts & Taxation
+             Associates
             </span>
           </div>
         </Link>

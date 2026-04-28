@@ -17,9 +17,22 @@ export default function Accreditations({ logos }: AccreditationsProps) {
       
       <div className="max-w-7xl mx-auto px-6">
         
-        <p className="text-center text-xl font-bold text-brand-primary uppercase tracking-[0.2em] mb-12">
-          Our Credentials
-        </p>
+       {/* --- NEW HEADER UI --- */}
+        <div className="mb-16 text-center">
+          {/* 1. The small wide-tracked label */}
+          <p className="text-xl font-bold text-brand-primary uppercase tracking-[0.2em]">
+            Our Credentials
+          </p>
+          
+          {/* 2. The main heading */}
+          <h2 className="mt-4 text-4xl font-bold text-brand-text md:text-5xl">
+            Trusted by <span className="text-brand-primary">Industry Leaders</span>
+          </h2>
+
+          {/* 3. The accent line (Coral) */}
+          <div className="mt-6 h-1.5 w-20 bg-brand-button mx-auto rounded-full" />
+        </div>
+        {/* --- END HEADER UI --- */}
 
         <div className="flex flex-wrap justify-center items-center gap-12">
           

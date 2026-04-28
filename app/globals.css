@@ -11,7 +11,8 @@
 
   /* ROLE-BASED COLORS */
   --color-brand-logo: #6c5f8a;       /* Logo = purple */
-  --color-brand-heading: #ffffff;    /* Headings = white */
+  --color-brand-heading: #ffffff; 
+  --color-brand-halfheading: #2D2926;   /* Headings = charcol*/
   --color-brand-subheading: #db6164; /* Subheadings = coral */
   --color-brand-button: #db6164;     /* Buttons = coral */
 }

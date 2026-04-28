@@ -7,7 +7,7 @@ import CalculatorsSection from '../components/CalculatorsSection';
 import ClosingCTA from '@/components/ClosingCTA';
 import GoogleReviews from '../components/GoogleReviews';
 import Accreditations from '@/components/Accreditations';
-
+import TeamSection from '@/components/team';
 
 
 const logos = [
@@ -38,6 +38,10 @@ export default function Home() {
 
       {/* Slide from RIGHT */}
         <CalculatorsSection />
+
+      {/* Insert the Team Section here */}
+      <TeamSection />
+
 
       {/* Slide from LEFT */}
         <GoogleReviews />

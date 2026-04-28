@@ -17,23 +17,51 @@ export default function AccountingChat() {
     {
       role: "assistant",
       content:
-        "Hi! I can help with VAT, PAYE, and Self-Assessment. This is general guidance only, not professional advice.",
+        "Hi! I can help with VAT, PAYE, and Self-Assessment. This is general guidance only.",
     },
   ]);
 
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showBooking, setShowBooking] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Auto scroll chat
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages, isLoading]);
 
-  // 💬 CHAT SUBMIT
+  // -------------------------
+  // HUBSPOT LEAD
+  // -------------------------
+  const createHubSpotLead = async (source: string) => {
+    try {
+      await fetch("/api/hubspot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          source,
+          page: pathname,
+          timestamp: new Date().toISOString(),
+        }),
+      });
+    } catch (err) {
+      console.error("HubSpot error", err);
+    }
+  };
+
+  // -------------------------
+  // CAL.COM BOOKING
+  // -------------------------
+  const triggerBooking = () => {
+    window.open("/booking", "_blank");
+  };
+
+  // -------------------------
+  // CHAT SUBMIT
+  // -------------------------
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
@@ -57,40 +85,53 @@ export default function AccountingChat() {
       const data = await res.json();
 
       if (data.reply) {
-        setMessages((prev) => [
-          ...prev,
-          { role: "assistant", content: data.reply },
-        ]);
+        let parsed;
+
+        try {
+          parsed = JSON.parse(data.reply);
+        } catch {
+          setMessages((prev) => [
+            ...prev,
+            { role: "assistant", content: data.reply },
+          ]);
+          return;
+        }
+
+        // -------------------------
+        // INTENT ROUTER
+        // -------------------------
+        switch (parsed.intent) {
+          case "BOOK_SESSION":
+            setShowBooking(true);
+            await createHubSpotLead("booking");
+            break;
+
+          case "VAT_QUERY":
+            await createHubSpotLead("vat");
+            break;
+
+          case "PAYROLL_QUERY":
+            await createHubSpotLead("payroll");
+            break;
+
+          default:
+            setMessages((prev) => [
+              ...prev,
+              {
+                role: "assistant",
+                content: parsed.message || "Let me help you with that.",
+              },
+            ]);
+        }
       }
     } catch {
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: "Sorry, something went wrong." },
+        { role: "assistant", content: "Something went wrong." },
       ]);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // 🚀 BOOK CONSULTATION (NO FORM)
-  const handleBooking = async () => {
-    try {
-      // optional tracking only (does NOT block user)
-      await fetch("/api/lead-click", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          source: "chat",
-          page: pathname,
-          timestamp: new Date().toISOString(),
-        }),
-      });
-    } catch (err) {
-      console.error("Tracking error:", err);
-    }
-
-    // 🚀 DIRECT TO BOOKING PAGE
-    window.location.href = "/booking";
   };
 
   return (
@@ -98,30 +139,21 @@ export default function AccountingChat() {
 
       {/* CHAT WINDOW */}
       {isOpen && (
-        <div className="bg-white w-85 h-130 rounded-2xl shadow-2xl flex flex-col overflow-hidden border">
+        <div className="bg-white w-85 h-130 rounded-2xl shadow-2xl flex flex-col overflow-hidden border relative">
 
           {/* HEADER */}
           <div className="bg-brand-primary p-4 text-white flex justify-between items-center">
             <div>
-              <p className="font-bold text-sm">M&M Assistant</p>
-              <p className="text-[10px] opacity-80 uppercase">
-                UK Accounting Bot
-              </p>
-            </div>
+            <p className="font-bold text-sm tracking-tight">Alchemy Assistant</p>
+           <p className="text-[10px] opacity-80 uppercase font-bold tracking-widest">uk accounting bot</p>
+           </div>
             <button onClick={() => setIsOpen(false)}>
               <X />
             </button>
           </div>
 
           {/* CHAT */}
-          <div
-            ref={scrollRef}
-            className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50"
-          >
-            {/* WARNING */}
-            <div className="bg-yellow-100 border border-yellow-300 text-yellow-800 text-[11px] p-3 rounded-xl">
-              General guidance only. Do not share personal or financial data.
-            </div>
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50">
 
             {messages.map((m, i) => (
               <div
@@ -152,31 +184,54 @@ export default function AccountingChat() {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask a question..."
               className="flex-1 p-2 border rounded-md text-sm"
+              placeholder="Ask a question..."
             />
             <button className="bg-brand-primary text-white p-2 rounded-md">
               <Send size={16} />
             </button>
           </form>
+        </div>
+      )}
 
-          {/* BOOK BUTTON */}
-          <button
-            onClick={handleBooking}
-            className="m-3 bg-brand-button text-white p-2 rounded-md text-sm flex items-center justify-center gap-2 hover:opacity-90 transition"
-          >
-            <Calendar size={14} />
-            Book Consultation
-          </button>
+      {/* BOOKING MODAL */}
+      {showBooking && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-xl max-w-sm w-full text-center">
+
+            <Calendar className="mx-auto mb-3 text-brand-primary" />
+
+            <h2 className="text-brand-primary text-lg mb-2">
+              Book a Consultation
+            </h2>
+
+            <p className="text-sm text-gray-500 mb-4">
+              Speak to an accounting expert.
+            </p>
+
+            <button
+              onClick={triggerBooking}
+              className="bg-brand-primary text-white w-full py-3 rounded-xl font-bold"
+            >
+              Continue to booking
+            </button>
+
+            <button
+              onClick={() => setShowBooking(false)}
+              className="text-xs text-gray-400 mt-3"
+            >
+              Close
+            </button>
+          </div>
         </div>
       )}
 
       {/* FLOAT BUTTON */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-brand-button text-white p-4 rounded-full shadow-xl hover:bg-brand-primary hover:scale-105 transition"
+        className="bg-brand-primary text-white p-4 rounded-full shadow-xl"
       >
-        {isOpen ? <X /> : <MessageCircle />}
+        <MessageCircle />
       </button>
     </div>
   );

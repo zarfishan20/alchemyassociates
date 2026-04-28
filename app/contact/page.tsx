@@ -118,14 +118,14 @@ export default function ContactPage() {
               Contact
             </span>
             <motion.h1
-              variants={slideIn("left", 0.2)}
-              className="relative text-7xl md:text-9xl font-black text-brand-text leading-[0.8] tracking-[-0.05em] uppercase"
-            >
-              Strategic <br />
-              <span className="text-transparent bg-clip-text bg-linear-to-br from-brand-primary via-[#2db7c5] to-brand-text">
-                Briefing.
-              </span>
-            </motion.h1>
+  variants={slideIn("left", 0.2)}
+  className="relative text-3xl md:text-5xl lg:text-6xl font-black text-brand-primary leading-[0.9] tracking-[-0.05em] uppercase"
+>
+  Strategic <br />
+  <span className="text-transparent bg-clip-text bg-linear-to-br from-(--color-brand-primary) via-brand-accent to-(--color-brand-subheading)">
+    Briefing.
+  </span>
+</motion.h1>
           </div>
 
           <motion.p

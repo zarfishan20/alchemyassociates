@@ -163,7 +163,7 @@ export default function AccountingChat() {
           {/* BOOK BUTTON */}
           <button
             onClick={handleBooking}
-            className="m-3 bg-black text-white p-2 rounded-md text-sm flex items-center justify-center gap-2 hover:opacity-90 transition"
+            className="m-3 bg-brand-button text-white p-2 rounded-md text-sm flex items-center justify-center gap-2 hover:opacity-90 transition"
           >
             <Calendar size={14} />
             Book Consultation
@@ -174,7 +174,7 @@ export default function AccountingChat() {
       {/* FLOAT BUTTON */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-brand-primary text-white p-4 rounded-full shadow-xl hover:scale-105 transition"
+        className="bg-brand-button text-white p-4 rounded-full shadow-xl hover:bg-brand-primary hover:scale-105 transition"
       >
         {isOpen ? <X /> : <MessageCircle />}
       </button>

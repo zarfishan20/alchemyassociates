@@ -12,10 +12,8 @@ import Accreditations from '@/components/Accreditations';
 
 const logos = [
   { src: "/logos/acca.png", alt: "ACCA" },
-  { src: "/logos/icaew.png", alt: "ICAEW" },
-  { src: "/logos/acas.png", alt: "ACAS" },
-  { src: "/logos/xero.png", alt: "Xero" },
-  { src: "/logos/sage.png", alt: "Sage" },
+  { src: "/logos/icaew.jpg", alt: "ICAEW" },
+  { src: "/logos/acas.png", alt: "ATT" },
 ];
 
 

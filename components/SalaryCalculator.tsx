@@ -52,7 +52,7 @@ export default function SalaryCalculator() {
         <div className="bg-brand-primary/10 p-3 rounded-xl text-brand-primary flex items-center justify-center">
           <PoundSterling size={24} />
         </div>
-        <h3 className="text-2xl font-black text-brand-text uppercase tracking-tight">
+        <h3 className="text-2xl font-black text-brand-primary uppercase tracking-tight">
           System Salary Estimator
         </h3>
       </div>
@@ -97,7 +97,7 @@ export default function SalaryCalculator() {
             <p className="text-[10px] font-bold text-brand-text/60 uppercase mb-2 tracking-widest">
               Monthly Take-Home
             </p>
-            <p className="text-4xl font-black text-brand-text">
+            <p className="text-4xl font-black text-brand-primary">
               £{Math.round(animatedNet / 12).toLocaleString()}
             </p>
             <div className="mt-4 h-1 w-12 bg-brand-primary rounded-full" />

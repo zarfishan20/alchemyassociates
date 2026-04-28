@@ -48,10 +48,10 @@ export default function Hero() {
           {/* Headline - Slides in from left with slight delay */}
           <motion.h1 
             variants={slideIn("left", 0.2)}
-            className="text-4xl md:text-5xl font-black text-brand-text mb-6 leading-tight"
+            className="text-4xl md:text-5xl font-black text-brand-primary mb-6 leading-tight"
           >
             
-Expert Accounting <span className="text-brand-primary italic">& Taxation Services </span>
+Chartered Accountants <span className="text-brand-button italic">in Chadwell Heath </span>
           </motion.h1>
 
           {/* Subtext - Fades up */}
@@ -59,7 +59,9 @@ Expert Accounting <span className="text-brand-primary italic">& Taxation Service
             variants={fadeUp(0.3)}
             className="text-lg text-brand-text/70 mb-10 max-w-md leading-relaxed font-medium"
           >
-          Professional financial solutions tailored for your business growth. Trust M&M for accuracy, compliance, and peace of mind.</motion.p>
+         
+From self-assessments to corporate tax planning, Alchemy Associates provides the local expertise you can trust in Chadwell Heath.
+</motion.p>
 
           {/* CTA Buttons - Fades up slightly later */}
   <motion.div
@@ -69,7 +71,7 @@ Expert Accounting <span className="text-brand-primary italic">& Taxation Service
             {/* PRIMARY */}
             <Link
               href="/booking"
-              className="bg-brand-text text-white px-10 py-4 rounded-full font-bold text-sm uppercase tracking-widest shadow-lg shadow-brand-text/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl active:scale-95 flex items-center justify-center"
+              className="bg-brand-button text-white px-10 py-4 rounded-full font-bold text-sm uppercase tracking-widest shadow-lg shadow-brand-text/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl active:scale-95 flex items-center justify-center"
             >
               Book Free Consultation
             </Link>
@@ -77,7 +79,7 @@ Expert Accounting <span className="text-brand-primary italic">& Taxation Service
             {/* SECONDARY */}
             <Link
               href="/quote"
-              className="bg-white text-brand-text border border-brand-text/20 px-10 py-4 rounded-full font-bold text-sm uppercase tracking-widest transition-all duration-300 hover:bg-brand-primary hover:text-white hover:border-brand-primary hover:-translate-y-1 active:scale-95 flex items-center justify-center"
+              className="bg-white text-brand-primary border border-brand-text/20 px-10 py-4 rounded-full font-bold text-sm uppercase tracking-widest transition-all duration-300 hover:bg-brand-primary hover:text-white hover:border-brand-primary hover:-translate-y-1 active:scale-95 flex items-center justify-center"
             >
               Request a Quote
             </Link>

@@ -20,7 +20,7 @@ export default function CalculatorsSection() {
         />
 
         {/* Gradient overlay (FIXED CLASS) */}
-        <div className="absolute inset-0 bg-linear-to-b from-black/30 to-black/60" />
+        <div className="absolute inset-0 bg-linear-to-b from-brand-primary/30 to-brand-primary/60" />
       </div>
 
       {/* Content wrapper (IMPORTANT FIX) */}
@@ -34,7 +34,7 @@ export default function CalculatorsSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
+          <h2 className="text-4xl md:text-5xl font-black text-brand-primary mb-6">
             Understand Your Payroll & ROI
           </h2>
 

@@ -91,7 +91,7 @@ export default function ROICalculator() {
           </p>
 
           <motion.p
-            className="text-6xl font-black text-brand-text"
+            className="text-6xl font-black text-brand-primary"
             key={animatedValue}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}

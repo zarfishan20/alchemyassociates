@@ -37,7 +37,7 @@ export default function ClosingCTA() {
           </span>
 
           {/* HEADLINE */}
-          <h2 className="text-4xl md:text-5xl font-black text-brand-text mb-6 leading-tight">
+          <h2 className="text-4xl md:text-5xl font-black text-brand-primary mb-6 leading-tight">
             Ready to Take Control of Your Finances?
           </h2>
 
@@ -53,7 +53,7 @@ export default function ClosingCTA() {
               <motion.button
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
-                className="bg-brand-primary text-white w-full sm:w-auto min-w-70 px-12 py-5 rounded-full font-black text-sm tracking-widest uppercase shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center justify-center"
+                className="bg-brand-button text-white w-full sm:w-auto min-w-70 px-12 py-5 rounded-full font-black text-sm tracking-widest uppercase shadow-lg hover:bg-brand-primary hover:shadow-2xl transition-all duration-300 flex items-center justify-center"
               >
                 Book Free Consultation
               </motion.button>

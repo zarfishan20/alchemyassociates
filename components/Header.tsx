@@ -11,6 +11,7 @@ export default function Header() {
 
   const navLinks = [
     { name: "Home", href: "/" },
+    { name: "News", href: "/news" },
     { name: "Contact Us", href: "/contact" },
   ];
 
@@ -21,12 +22,12 @@ export default function Header() {
   ];
 
   return (
-    <nav className="bg-white border-b border-brand-text/5 sticky top-0 z-50 font-sans">
+    <nav className="bg-white border-b border-brand-accent/5 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
 
         {/* LOGO */}
         <Link href="/" className="flex items-center gap-2">
-          <div className="relative w-14 h-14 md:w-16 md:h-16">
+          <div className="relative w-12 h-12 md:w-14 md:h-14">
             <Image
               src="/logo.png"
               alt="alchemy associates logo"
@@ -35,65 +36,104 @@ export default function Header() {
             />
           </div>
 
-          <div className="leading-none">
-            <span className="block text-brand-text uppercase font-black text-3xl md:text-4xl">
+          <div className="leading-tight">
+            <span className="block text-(--color-brand-logo) uppercase font-black text-2xl md:text-3xl">
               Alchemy
             </span>
-            <span className="block text-brand-primary font-light text-sm md:text-base">
-             Associates
+            <span className="block text-(--color-brand-subheading) font-medium text-sm">
+              Associates
             </span>
           </div>
         </Link>
 
         {/* DESKTOP NAV */}
-        <div className="hidden md:flex items-center gap-8 text-[11px] font-bold uppercase tracking-[0.2em]">
+        <div className="hidden md:flex items-center gap-8 text-[11px] font-bold uppercase tracking-widest">
 
-          {/* LINKS */}
           {navLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
-              className="text-brand-text hover:text-brand-primary transition-colors"
+              className="text-(--color-brand-primary) hover:text-(--color-brand-button) transition"
             >
               {link.name}
             </Link>
           ))}
 
-          {/* DROPDOWN WRAPPER (FIXED) */}
+          {/* DROPDOWN */}
           <div
             className="relative"
             onMouseEnter={() => setIsCalcOpen(true)}
             onMouseLeave={() => setIsCalcOpen(false)}
           >
-
-            {/* TRIGGER */}
-            <div className="flex items-center gap-1 text-brand-text hover:text-brand-primary transition-colors cursor-pointer">
+            <div className="flex items-center gap-1 text-(--color-brand-primary) cursor-pointer">
               Calculators
-              <ChevronDown
-                size={12}
-                className={`transition-transform duration-300 ${
-                  isCalcOpen ? "rotate-180" : ""
-                }`}
-              />
+              <ChevronDown size={12} />
             </div>
 
-            {/* HOVER BRIDGE (prevents flicker) */}
-            <div className="absolute top-full left-0 w-full h-3" />
+            {isCalcOpen && (
+              <div className="absolute top-full left-0 w-60 bg-white shadow-xl text-(--color-brand-primary) rounded-xl py-3 border border-brand-accent">
+                {calculatorLinks.map((calc) => (
+                  <Link
+                    key={calc.name}
+                    href={calc.href}
+                    className="block px-5 py-3 text-[10px] font-bold hover:bg-brand-subheading/50"
+                  >
+                    {calc.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
 
-            {/* DROPDOWN */}
-            <div
-              className={`absolute top-full -left-4 w-60 bg-white border border-brand-text/5 shadow-2xl rounded-2xl py-3 transition-all duration-300 z-50 ${
-                isCalcOpen
-                  ? "opacity-100 visible translate-y-0"
-                  : "opacity-0 invisible -translate-y-2"
-              }`}
-            >
+          {/* LOGIN */}
+          <Link
+            href="https://login.xero.com/identity/user/login"
+            target="_blank"
+            className="flex items-center gap-2 bg-(--color-brand-button) hover:bg-brand-primary text-white px-5 py-2 rounded-full text-xs font-bold"
+          >
+            <Lock size={12} />
+            Portal
+          </Link>
+        </div>
+
+        {/* MOBILE BUTTON */}
+        <button
+          className="md:hidden p-2 text-brand-primary"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
+      </div>
+
+      {/* MOBILE MENU */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden fixed inset-0 top-20 bg-white z-40 flex flex-col ">
+
+          {/* scroll area */}
+          <div className="flex-1 overflow-y-auto p-6 space-y-6">
+
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="block text-xl font-black text-(--color-brand-primary) hover:text-brand-subheading"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {link.name}
+              </Link>
+            ))}
+
+            <div className="border-t border-brand-primary pt-6">
+              <p className="text-sm font-black text-(--color-brand-subheading) mb-4 uppercase">
+                Calculators
+              </p>
+
               {calculatorLinks.map((calc) => (
                 <Link
                   key={calc.name}
                   href={calc.href}
-                  onClick={() => setIsCalcOpen(false)}
-                  className="block px-6 py-3 text-[10px] font-black text-brand-text hover:bg-brand-surface hover:text-brand-primary uppercase tracking-widest"
+                  className="block text-base font-semibold mb-3 text-(--color-brand-primary) hover:text-brand-subheading"
+                  onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {calc.name}
                 </Link>
@@ -101,64 +141,16 @@ export default function Header() {
             </div>
           </div>
 
-          {/* PORTAL LOGIN */}
-          <Link
-            href="https://login.xero.com/identity/user/login"
-            target="_blank"
-            className="flex items-center gap-2 bg-brand-text text-white px-6 py-3 rounded-full hover:bg-brand-primary transition-all"
-          >
-            <Lock size={12} />
-            Portal Login
-          </Link>
-        </div>
-
-        {/* MOBILE TOGGLE */}
-        <button
-          className="md:hidden text-brand-text p-2"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
-      </div>
-
-      {/* MOBILE MENU */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-brand-surface fixed inset-x-0 top-20 bottom-0 z-40 p-8 flex flex-col gap-8 overflow-y-auto">
-
-          {navLinks.map((link) => (
+          {/* FIXED BOTTOM BUTTON */}
+          <div className="p-6 border-t border-brand-primary">
             <Link
-              key={link.name}
-              href={link.href}
-              className="text-3xl font-black text-brand-text"
-              onClick={() => setIsMobileMenuOpen(false)}
+              href="https://login.xero.com/identity/user/login"
+              className="flex items-center justify-center gap-2 bg-(--color-brand-button) text-white p-4 rounded-2xl font-bold w-full hover:bg-brand-primary"
             >
-              {link.name}
+              <Lock size={16} />
+              Portal Login
             </Link>
-          ))}
-
-          <div className="pt-4 border-t border-brand-text/10">
-            <p className="text-brand-primary text-xs font-black uppercase mb-4">
-              Calculators
-            </p>
-
-            {calculatorLinks.map((calc) => (
-              <Link
-                key={calc.name}
-                href={calc.href}
-                className="block text-xl font-bold text-brand-text mb-3"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {calc.name}
-              </Link>
-            ))}
           </div>
-
-          <Link
-            href="https://login.xero.com/identity/user/login"
-            className="mt-auto bg-brand-text text-white p-6 rounded-2xl text-center font-black"
-          >
-            <Lock size={18} /> Portal Login
-          </Link>
         </div>
       )}
     </nav>

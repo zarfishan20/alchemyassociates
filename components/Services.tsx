@@ -6,7 +6,7 @@ export default function Services() {
   return (
     <section id="services" className="py-32 px-6 max-w-7xl mx-auto">
       <div className="text-center mb-20">
-        <h2 className="text-4xl font-black text-brand-navy tracking-tight">Scale with confidence</h2>
+        <h2 className="text-4xl font-black text-brand-primary tracking-tight">Scale with confidence</h2>
       </div>
       
       <div className="grid md:grid-cols-3 gap-8">
@@ -41,12 +41,12 @@ function ServiceCard({ icon, title, desc, delay }: { icon: React.ReactNode, titl
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay }}
       whileHover={{ y: -12, transition: { duration: 0.2 } }}
-      className="p-10 rounded-4xl border border-brand-navy/5 bg-white hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all group"
+      className="p-10 rounded-4xl border border-brand-primary/5 bg-white hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all group"
     >
-      <div className="text-brand-gold mb-8 group-hover:scale-110 transition-transform duration-500">{icon}</div>
-      <h3 className="text-2xl font-black mb-4 text-brand-navy">{title}</h3>
+      <div className="text-brand-primary mb-8 group-hover:scale-110 transition-transform duration-500">{icon}</div>
+      <h3 className="text-2xl font-black mb-4 text-brand-primary">{title}</h3>
       <p className="text-brand-slate leading-relaxed text-sm font-medium">{desc}</p>
-      <div className="mt-8 flex items-center gap-2 text-brand-gold font-black text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="mt-8 flex items-center gap-2 text-brand-primary font-black text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
         Explore Service <ArrowRight size={14} />
       </div>
     </motion.div>

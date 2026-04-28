@@ -10,7 +10,7 @@ export default function Footer() {
         {/* FlexiPay Branding */}
         <div>
           <h3 className="text-brand-primary font-black text-xl mb-6 tracking-tighter uppercase">
-            Alchemy<span className="text-white/50">Associates</span>
+            Alchemy<span className="text-brand-subheading/50">Associates</span>
           </h3>
           <p className="text-sm text-white/60 leading-relaxed">
            Alchemy Associates, a modern accountancy firm headquartered in Romford, United Kingdom, emerged with a vision to streamline the financial operations of businesses. With a niche in bookkeeping and payroll services, we have honed our expertise to cater to the needs of small and medium-sized enterprises.
@@ -29,14 +29,14 @@ export default function Footer() {
           {/* ADDED PHONE NUMBER SECTION */}
           <div className="flex items-center gap-3 text-sm text-white/80">
             <Phone size={18} className="text-brand-primary" />
-            <a href="tel:+447828693818" className="hover:text-brand-primary transition">
+            <a href="tel:+447828693818" className="hover:text-brand-subheading transition">
               +44 7828693818
             </a>
           </div>
 
           <div className="flex items-center gap-3 text-sm text-white/80">
             <Mail size={18} className="text-brand-primary" />
-            <a href="mailto:info@alchemyassociates.co.uk" className="hover:text-brand-primary transition">
+            <a href="mailto:info@alchemyassociates.co.uk" className="hover:text-brand-subheading transition">
               info@alchemyassociates.co.uk
             </a>
           </div>
@@ -61,12 +61,12 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="max-w-7xl mx-auto px-6 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] uppercase tracking-widest text-white/30">
-        <p>© 2026 Alchemy Associates ltd • <Link href="/privacy" className="hover:text-white transition">Privacy & Compliance</Link></p>
+        <p>© 2026 Alchemy Associates ltd • <Link href="/privacy" className="hover:text-brand-subheading transition">Privacy & Compliance</Link></p>
         
         <a 
           href="https://caramelwebstudios.com" 
           target="_blank" 
-          className="flex items-center gap-1 hover:text-brand-primary transition font-bold"
+          className="flex items-center gap-1 hover:text-brand-subheading transition font-bold"
         >
           Build by Caramel Web Studios <ExternalLink size={10} />
         </a>

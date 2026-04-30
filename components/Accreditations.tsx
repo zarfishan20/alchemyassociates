@@ -1,4 +1,4 @@
-"use client";
+
 
 import Image from "next/image";
 
@@ -25,16 +25,16 @@ export default function Accreditations({ logos }: AccreditationsProps) {
           </p>
           
           {/* 2. The main heading */}
-          <h2 className="mt-4 text-4xl font-bold text-brand-text md:text-5xl">
+          <h2 className="mt-4 text-4xl font-bold text-brand-halfheading md:text-5xl">
             Trusted by <span className="text-brand-primary">Industry Leaders</span>
           </h2>
 
           {/* 3. The accent line (Coral) */}
-          <div className="mt-6 h-1.5 w-20 bg-brand-button mx-auto rounded-full" />
+          <div className="mt-6 h-1 w-20 bg-brand-button mx-auto rounded-full" />
         </div>
         {/* --- END HEADER UI --- */}
 
-        <div className="flex flex-wrap justify-center items-center gap-12">
+          <div className="flex flex-wrap justify-center items-center gap-12">
           
           {logos.map((logo, i) => (
             <div
@@ -51,14 +51,7 @@ export default function Accreditations({ logos }: AccreditationsProps) {
                 alt={logo.alt}
                 width={128}
                 height={64}
-                className="
-                  object-contain 
-                  grayscale 
-                  opacity-70 
-                  hover:opacity-100 
-                  transition-all 
-                  duration-500
-                "
+              className="object-contain opacity-90 hover:opacity-100 transition duration-300"
               />
             </div>
           ))}

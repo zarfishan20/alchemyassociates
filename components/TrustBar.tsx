@@ -1,3 +1,8 @@
+
+"use client";
+
+
+
 export default function TrustBar() {
   return (
     <section className="border-y border-brand-primary/5 bg-white py-12">

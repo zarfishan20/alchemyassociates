@@ -33,9 +33,6 @@ export default function AccountingChat() {
     }
   }, [messages, isLoading]);
 
-  // -------------------------
-  // HUBSPOT LEAD
-  // -------------------------
   const createHubSpotLead = async (source: string) => {
     try {
       await fetch("/api/hubspot", {
@@ -52,16 +49,10 @@ export default function AccountingChat() {
     }
   };
 
-  // -------------------------
-  // CAL.COM BOOKING
-  // -------------------------
   const triggerBooking = () => {
     window.open("/booking", "_blank");
   };
 
-  // -------------------------
-  // CHAT SUBMIT
-  // -------------------------
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
@@ -84,45 +75,48 @@ export default function AccountingChat() {
 
       const data = await res.json();
 
-      if (data.reply) {
-        let parsed;
+      const parsed = data.reply;
 
-        try {
-          parsed = JSON.parse(data.reply);
-        } catch {
+      if (!parsed) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: "No response from server.",
+          },
+        ]);
+        return;
+      }
+
+      const message = parsed.message || "Let me help you with that.";
+
+      switch (parsed.intent) {
+        case "BOOK_SESSION":
+          setShowBooking(true);
+          await createHubSpotLead("booking");
+          break;
+
+        case "VAT_QUERY":
+          await createHubSpotLead("vat");
           setMessages((prev) => [
             ...prev,
-            { role: "assistant", content: data.reply },
+            { role: "assistant", content: message },
           ]);
-          return;
-        }
+          break;
 
-        // -------------------------
-        // INTENT ROUTER
-        // -------------------------
-        switch (parsed.intent) {
-          case "BOOK_SESSION":
-            setShowBooking(true);
-            await createHubSpotLead("booking");
-            break;
+        case "PAYROLL_QUERY":
+          await createHubSpotLead("payroll");
+          setMessages((prev) => [
+            ...prev,
+            { role: "assistant", content: message },
+          ]);
+          break;
 
-          case "VAT_QUERY":
-            await createHubSpotLead("vat");
-            break;
-
-          case "PAYROLL_QUERY":
-            await createHubSpotLead("payroll");
-            break;
-
-          default:
-            setMessages((prev) => [
-              ...prev,
-              {
-                role: "assistant",
-                content: parsed.message || "Let me help you with that.",
-              },
-            ]);
-        }
+        default:
+          setMessages((prev) => [
+            ...prev,
+            { role: "assistant", content: message },
+          ]);
       }
     } catch {
       setMessages((prev) => [
@@ -139,22 +133,27 @@ export default function AccountingChat() {
 
       {/* CHAT WINDOW */}
       {isOpen && (
-        <div className="bg-white w-85 h-130 rounded-2xl shadow-2xl flex flex-col overflow-hidden border relative">
+        <div className="bg-white w-[340px] h-[520px] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200">
 
           {/* HEADER */}
-          <div className="bg-brand-primary p-4 text-white flex justify-between items-center">
+          <div className="bg-brand-primary p-4 text-white flex justify-between items-center border-b border-black/10">
             <div>
-            <p className="font-bold text-sm tracking-tight">Alchemy Assistant</p>
-           <p className="text-[10px] opacity-80 uppercase font-bold tracking-widest">uk accounting bot</p>
-           </div>
+              <p className="font-bold text-sm">Alchemy Assistant</p>
+              <p className="text-[10px] opacity-80 uppercase tracking-widest">
+                UK accounting bot
+              </p>
+            </div>
+
             <button onClick={() => setIsOpen(false)}>
-              <X />
+              <X size={18} />
             </button>
           </div>
 
           {/* CHAT */}
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50">
-
+          <div
+            ref={scrollRef}
+            className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50"
+          >
             {messages.map((m, i) => (
               <div
                 key={i}
@@ -166,7 +165,7 @@ export default function AccountingChat() {
                   className={`p-3 rounded-xl text-sm max-w-[80%] ${
                     m.role === "user"
                       ? "bg-brand-primary text-white"
-                      : "bg-white border"
+                      : "bg-white border border-gray-200"
                   }`}
                 >
                   {m.content}
@@ -175,18 +174,24 @@ export default function AccountingChat() {
             ))}
 
             {isLoading && (
-              <Loader2 className="animate-spin text-brand-primary" />
+              <div className="flex justify-start">
+                <Loader2 className="animate-spin text-brand-primary" />
+              </div>
             )}
           </div>
 
           {/* INPUT */}
-          <form onSubmit={handleSubmit} className="p-3 border-t flex gap-2">
+          <form
+            onSubmit={handleSubmit}
+            className="p-3 border-t border-gray-200 flex gap-2 bg-white"
+          >
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="flex-1 p-2 border rounded-md text-sm"
+              className="flex-1 p-2 border border-gray-300 rounded-md text-sm"
               placeholder="Ask a question..."
             />
+
             <button className="bg-brand-primary text-white p-2 rounded-md">
               <Send size={16} />
             </button>
@@ -197,7 +202,7 @@ export default function AccountingChat() {
       {/* BOOKING MODAL */}
       {showBooking && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-xl max-w-sm w-full text-center">
+          <div className="bg-white p-6 rounded-xl max-w-sm w-full text-center border border-gray-200">
 
             <Calendar className="mx-auto mb-3 text-brand-primary" />
 
@@ -229,7 +234,7 @@ export default function AccountingChat() {
       {/* FLOAT BUTTON */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-brand-primary text-white p-4 rounded-full shadow-xl"
+        className="bg-brand-primary text-white p-4 rounded-full shadow-xl border border-white/20"
       >
         <MessageCircle />
       </button>

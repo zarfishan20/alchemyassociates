@@ -31,21 +31,28 @@ export default function ClosingCTA() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
 
-          {/* SMALL TAG */}
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-primary mb-6 block">
-            Let’s Get Started
-          </span>
+         <div className="mb-12 text-center">
 
-          {/* HEADLINE */}
-          <h2 className="text-4xl md:text-5xl font-black text-brand-primary mb-6 leading-tight">
-            Ready to Take Control of Your Finances?
-          </h2>
+  {/* Label */}
+  <p className="text-xl font-bold text-brand-primary uppercase tracking-[0.2em]">
+    Contact Us
+  </p>
 
-          {/* SUBTEXT */}
-          <p className="text-brand-text/70 text-lg mb-10 max-w-xl mx-auto font-medium leading-relaxed">
-            Book a quick consultation with our team and get clarity on your tax,
-            bookkeeping, and payroll position in minutes.
-          </p>
+  {/* Heading */}
+  <h2 className="mt-4 text-4xl md:text-5xl font-bold text-brand-halfheading">
+    Ready to{" "}
+    <span className="text-brand-primary">Get Started?</span>
+  </h2>
+
+  {/* Accent line */}
+  <div className="mt-6 h-1 w-20 bg-brand-button mx-auto rounded-full" />
+
+  {/* Description */}
+  <p className="mt-8 text-lg text-brand-muted font-medium max-w-2xl mx-auto leading-relaxed">
+    Schedule your free consultation today and discover how we can help your business thrive.
+  </p>
+
+</div>
 
           {/* CTA BUTTON */}
           <div className="flex justify-center">

@@ -34,13 +34,28 @@ export default function CalculatorsSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <h2 className="text-4xl md:text-5xl font-black text-brand-primary mb-6">
-            Understand Your Payroll & ROI
-          </h2>
+          <div className="mb-12 text-center">
 
-          <p className="text-lg text-white/80 font-medium max-w-xl mx-auto">
-            Use our interactive tools to estimate your take-home salary and see how our system can optimise your operational efficiency.
-          </p>
+  {/* Label */}
+  <p className="text-xl font-bold text-brand-primary uppercase tracking-[0.2em]">
+    Payroll Tools
+  </p>
+
+  {/* Heading */}
+  <h2 className="mt-4 text-4xl md:text-5xl font-bold text-brand-halfheading">
+    Understand Your{" "}
+    <span className="text-brand-primary">Payroll & ROI</span>
+  </h2>
+
+  {/* Accent line */}
+  <div className="mt-6 h-1 w-20 bg-brand-button mx-auto rounded-full" />
+
+  {/* Description */}
+  <p className="mt-8 text-lg text-brand-muted font-medium max-w-2xl mx-auto leading-relaxed">
+    Use our interactive tools to estimate your take-home salary and see how our system can optimise your operational efficiency.
+  </p>
+
+</div>
         </motion.div>
 
         {/* Calculators */}

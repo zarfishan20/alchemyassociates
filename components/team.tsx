@@ -9,12 +9,12 @@ const team = [
   {
     name: "Marcus Chen",
     role: "Head of Product",
-    image: "",
+    image: "/founder.jpg",
   },
   {
     name: "Elena Rodriguez",
     role: "Creative Director",
-    image: "",
+    image: "/founder.jpg",
   },
 ];
 
@@ -38,12 +38,12 @@ export default function TeamSection() {
           {team.map((member) => (
             <div key={member.name} className="group relative">
               {/* Image Container with Custom Accent Border */}
-              <div className="relative aspect-square overflow-hidden rounded-2xl border-2 border-transparent transition-all duration-300 group-hover:border-brand-accent">
+              <div className="relative aspect-square overflow-hidden rounded-2xl border-2 border-transparent transition-all duration-300 group-hover:border-brand-grey">
                 <Image
                   src={member.image}
                   alt={member.name}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="grayscale hover:grayscale-0 object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 {/* Subtle Overlay on Hover */}
                 <div className="absolute inset-0 bg-brand-primary/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

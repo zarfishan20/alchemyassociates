@@ -53,90 +53,90 @@ export default function AccountingChat() {
     window.open("/booking", "_blank");
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isLoading) return;
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!input.trim() || isLoading) return;
 
-    const newMessages: Message[] = [
-      ...messages,
-      { role: "user", content: input },
-    ];
+  const newMessages: Message[] = [
+    ...messages,
+    { role: "user", content: input },
+  ];
 
-    setMessages(newMessages);
-    setInput("");
-    setIsLoading(true);
+  setMessages(newMessages);
+  setInput("");
+  setIsLoading(true);
 
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newMessages }),
-      });
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: newMessages }),
+    });
 
-      const data = await res.json();
+    const data = await res.json();
 
-      const parsed = data.reply;
+    // 🔥 SAFE PARSING (NO BREAKS EVER)
+    const parsed = typeof data.reply === "string"
+      ? JSON.parse(data.reply)
+      : data.reply;
 
-      if (!parsed) {
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: "assistant",
-            content: "No response from server.",
-          },
-        ]);
-        return;
-      }
-
-      const message = parsed.message || "Let me help you with that.";
-
-      switch (parsed.intent) {
-        case "BOOK_SESSION":
-          setShowBooking(true);
-          await createHubSpotLead("booking");
-          break;
-
-        case "VAT_QUERY":
-          await createHubSpotLead("vat");
-          setMessages((prev) => [
-            ...prev,
-            { role: "assistant", content: message },
-          ]);
-          break;
-
-        case "PAYROLL_QUERY":
-          await createHubSpotLead("payroll");
-          setMessages((prev) => [
-            ...prev,
-            { role: "assistant", content: message },
-          ]);
-          break;
-
-        default:
-          setMessages((prev) => [
-            ...prev,
-            { role: "assistant", content: message },
-          ]);
-      }
-    } catch {
+    if (!parsed) {
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: "Something went wrong." },
+        {
+          role: "assistant",
+          content: "No response from server.",
+        },
       ]);
-    } finally {
-      setIsLoading(false);
+      return;
     }
-  };
+
+    const message = parsed.message || "Let me help you with that.";
+
+    // Always show message FIRST (prevents "silent chat")
+    setMessages((prev) => [
+      ...prev,
+      { role: "assistant", content: message },
+    ]);
+
+    // THEN handle intent side-effects
+    switch (parsed.intent) {
+      case "BOOK_SESSION":
+        setShowBooking(true);
+        await createHubSpotLead("booking");
+        break;
+
+      case "VAT_QUERY":
+        await createHubSpotLead("vat");
+        break;
+
+      case "PAYROLL_QUERY":
+        await createHubSpotLead("payroll");
+        break;
+    }
+
+  } catch (err) {
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: "assistant",
+        content: "Something went wrong. Please try again.",
+      },
+    ]);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
 
       {/* CHAT WINDOW */}
       {isOpen && (
-        <div className="bg-white w-[340px] h-[520px] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200">
+        <div className="bg-white w-[340px] h-[520px] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 min-h-0">
 
-          {/* HEADER */}
-          <div className="bg-brand-primary p-4 text-white flex justify-between items-center border-b border-black/10">
+          {/* HEADER (FIXED) */}
+          <div className="flex-none bg-brand-primary p-4 text-white flex justify-between items-center border-b border-black/10">
             <div>
               <p className="font-bold text-sm">Alchemy Assistant</p>
               <p className="text-[10px] opacity-80 uppercase tracking-widest">
@@ -149,10 +149,10 @@ export default function AccountingChat() {
             </button>
           </div>
 
-          {/* CHAT */}
+          {/* CHAT BODY (FIXED SCROLL) */}
           <div
             ref={scrollRef}
-            className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50"
+            className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3 bg-gray-50"
           >
             {messages.map((m, i) => (
               <div
@@ -180,21 +180,21 @@ export default function AccountingChat() {
             )}
           </div>
 
-          {/* INPUT */}
+          {/* INPUT (FIXED) */}
           <form
             onSubmit={handleSubmit}
-            className="p-3 border-t border-gray-200 flex gap-2 bg-white"
+            className="flex-none p-3 border-t border-gray-200 flex gap-2 bg-white"
           >
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="flex-1 p-2 border border-gray-300 rounded-md text-sm"
+              className="flex-1 p-2 border border-gray-300 rounded-md text-sm outline-none focus:ring-2 focus:ring-brand-primary/30"
               placeholder="Ask a question..."
             />
 
-            <button className="bg-brand-primary text-white p-2 rounded-md">
-              <Send size={16} />
-            </button>
+            <button type="submit" className="bg-brand-primary text-white p-2 rounded-md">
+  <Send size={16} />
+</button>
           </form>
         </div>
       )}

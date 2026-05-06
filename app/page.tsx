@@ -13,7 +13,7 @@ import TeamSection from '@/components/team';
 const logos = [
   { src: "/logos/acca.png", alt: "ACCA" },
   { src: "/logos/icaew.jpg", alt: "ICAEW" },
-  { src: "/logos/acas.png", alt: "ATT" },
+  { src: "/logos/att.png", alt: "ATT" },
 ];
 
 

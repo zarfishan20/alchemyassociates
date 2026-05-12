@@ -7,6 +7,7 @@ type NewsItem = {
   urlToImage?: string;
   source: { name: string };
   publishedAt?: string;
+   slug: string;
 };
 
 // TEMP: in real apps you'd fetch this from DB or API
@@ -19,8 +20,7 @@ async function getNewsItem(slug: string): Promise<NewsItem | null> {
 
   const data: NewsItem[] = await res.json();
 
-  // simple fake slug match (replace later with real slug system)
-  const item = data.find((_, i) => i.toString() === slug);
+  const item = data.find((a) => a.slug === slug);
 
   return item || null;
 }

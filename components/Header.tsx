@@ -1,18 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ChevronDown, Menu, X, Lock } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function Header() {
-  const [mounted] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCalcOpen, setIsCalcOpen] = useState(false);
 
-
-
-  if (!mounted) return null;
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -26,8 +23,24 @@ export default function Header() {
     { name: "Tax Optimizer", href: "/#salary-calc" },
   ];
 
+  // close dropdown on outside click (safe UX fix)
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsCalcOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
-    <nav className="bg-white border-b border-brand-accent/5 sticky top-0 z-50">
+    <nav className="sticky top-0 z-50 bg-white border-b border-brand-accent/5">
       <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 h-20 flex justify-between items-center">
 
         {/* LOGO */}
@@ -56,7 +69,7 @@ export default function Header() {
 
           {navLinks.map((link) => (
             <Link
-              key={link.name}
+              key={`${link.name}-${link.href}`}
               href={link.href}
               className="text-(--color-brand-primary) hover:text-(--color-brand-button) transition"
             >
@@ -64,29 +77,30 @@ export default function Header() {
             </Link>
           ))}
 
-          {/* DROPDOWN (CLICK BASED) */}
-          <div className="relative">
+          {/* DROPDOWN */}
+          <div className="relative" ref={dropdownRef}>
             <button
-              onClick={() => setIsCalcOpen(!isCalcOpen)}
+              onClick={() => setIsCalcOpen((v) => !v)}
               className="flex items-center gap-1 text-(--color-brand-primary)"
             >
               Calculators
               <ChevronDown size={12} />
             </button>
 
-            {isCalcOpen && (
-              <div className="absolute top-full left-0 w-60 bg-white shadow-xl text-(--color-brand-primary) rounded-xl py-3 border border-brand-accent">
+            {isCalcOpen ? (
+              <div className="absolute top-full left-0 w-60 bg-white shadow-xl rounded-xl py-3 border z-50">
                 {calculatorLinks.map((calc) => (
                   <Link
-                    key={calc.name}
+                    key={`${calc.name}-${calc.href}`}
                     href={calc.href}
                     className="block px-5 py-3 text-[10px] font-bold hover:bg-brand-subheading/50"
+                    onClick={() => setIsCalcOpen(false)}
                   >
                     {calc.name}
                   </Link>
                 ))}
               </div>
-            )}
+            ) : null}
           </div>
 
           {/* LOGIN */}
@@ -100,34 +114,33 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* MOBILE + TABLET BUTTON */}
+        {/* MOBILE BUTTON */}
         <button
           className="lg:hidden p-2 text-brand-primary"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          onClick={() => setIsMobileMenuOpen((v) => !v)}
         >
           {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
-      {/* MOBILE + TABLET MENU */}
-      {isMobileMenuOpen && (
+      {/* MOBILE MENU */}
+      {isMobileMenuOpen ? (
         <div className="lg:hidden fixed inset-0 top-20 z-40 flex">
 
-          {/* OVERLAY */}
+          {/* overlay */}
           <div
             className="flex-1 bg-black/30"
             onClick={() => setIsMobileMenuOpen(false)}
           />
 
-          {/* DRAWER */}
-          <div className="w-full md:w-100 bg-white h-full flex flex-col shadow-2xl">
+          {/* drawer */}
+          <div className="w-full md:w-96 bg-white h-full flex flex-col shadow-2xl">
 
-            {/* SCROLL AREA */}
-            <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6">
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
 
               {navLinks.map((link) => (
                 <Link
-                  key={link.name}
+                  key={`${link.name}-${link.href}`}
                   href={link.href}
                   className="block text-xl font-black text-(--color-brand-primary)"
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -136,16 +149,16 @@ export default function Header() {
                 </Link>
               ))}
 
-              <div className="border-t border-brand-primary pt-6">
-                <p className="text-sm font-black text-(--color-brand-subheading) mb-4 uppercase">
+              <div className="border-t pt-6">
+                <p className="text-sm font-black mb-4 uppercase">
                   Calculators
                 </p>
 
                 {calculatorLinks.map((calc) => (
                   <Link
-                    key={calc.name}
+                    key={`${calc.name}-${calc.href}`}
                     href={calc.href}
-                    className="block text-base font-semibold mb-3 text-(--color-brand-primary)"
+                    className="block text-base font-semibold mb-3"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {calc.name}
@@ -154,8 +167,7 @@ export default function Header() {
               </div>
             </div>
 
-            {/* BOTTOM BUTTON */}
-            <div className="p-6 border-t border-brand-primary">
+            <div className="p-6 border-t">
               <Link
                 href="https://login.xero.com/identity/user/login"
                 className="flex items-center justify-center gap-2 bg-(--color-brand-button) text-white p-4 rounded-2xl font-bold w-full"
@@ -164,9 +176,10 @@ export default function Header() {
                 Portal Login
               </Link>
             </div>
+
           </div>
         </div>
-      )}
+      ) : null}
     </nav>
   );
 }

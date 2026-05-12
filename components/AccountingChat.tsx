@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { MessageCircle, X, Send, Loader2, Calendar } from "lucide-react";
+import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 
 interface Message {
   role: "user" | "assistant";
@@ -11,19 +11,18 @@ interface Message {
 
 export default function AccountingChat() {
   const pathname = usePathname();
-
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content:
-        "Hi! I can help with VAT, PAYE, and Self-Assessment. This is general guidance only.",
+      content: "Hi! I can help with VAT, PAYE, and Self-Assessment. This is general guidance only.",
     },
   ]);
 
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [showBooking, setShowBooking] = useState(false);
+  const [leadStep, setLeadStep] = useState<"none" | "name" | "email" | "done">("none");
+  const [leadData, setLeadData] = useState({ name: "", email: "" });
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -32,6 +31,11 @@ export default function AccountingChat() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages, isLoading]);
+
+  const triggerBooking = async () => {
+    await createHubSpotLead("booking_click");
+    window.open("/booking", "_blank");
+  };
 
   const createHubSpotLead = async (source: string) => {
     try {
@@ -45,198 +49,140 @@ export default function AccountingChat() {
         }),
       });
     } catch (err) {
-      console.error("HubSpot error", err);
+      console.error(err);
     }
   };
 
-  const triggerBooking = () => {
-    window.open("/booking", "_blank");
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
 
- const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  if (!input.trim() || isLoading) return;
+    const currentInput = input;
+    setInput("");
 
-  const newMessages: Message[] = [
-    ...messages,
-    { role: "user", content: input },
-  ];
-
-  setMessages(newMessages);
-  setInput("");
-  setIsLoading(true);
-
-  try {
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: newMessages }),
-    });
-
-    const data = await res.json();
-
-    // 🔥 SAFE PARSING (NO BREAKS EVER)
-    const parsed = typeof data.reply === "string"
-      ? JSON.parse(data.reply)
-      : data.reply;
-
-    if (!parsed) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: "No response from server.",
-        },
-      ]);
+    // LEAD CAPTURE LOGIC
+    if (leadStep === "name") {
+      setLeadData((prev) => ({ ...prev, name: currentInput }));
+      setMessages((prev) => [...prev, { role: "user", content: currentInput }, { role: "assistant", content: "Great! What's your email address?" }]);
+      setLeadStep("email");
       return;
     }
 
-    const message = parsed.message || "Let me help you with that.";
-
-    // Always show message FIRST (prevents "silent chat")
-    setMessages((prev) => [
-      ...prev,
-      { role: "assistant", content: message },
-    ]);
-
-    // THEN handle intent side-effects
-    switch (parsed.intent) {
-      case "BOOK_SESSION":
-        setShowBooking(true);
-        await createHubSpotLead("booking");
-        break;
-
-      case "VAT_QUERY":
-        await createHubSpotLead("vat");
-        break;
-
-      case "PAYROLL_QUERY":
-        await createHubSpotLead("payroll");
-        break;
+    if (leadStep === "email") {
+      setLeadData((prev) => ({ ...prev, email: currentInput }));
+      setMessages((prev) => [...prev, { role: "user", content: currentInput }, { role: "assistant", content: "Perfect — opening booking now." }]);
+      setLeadStep("done");
+      await fetch("/api/hubspot/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: leadData.name, email: currentInput, page: pathname }),
+      });
+      setTimeout(triggerBooking, 1000);
+      return;
     }
 
-  } catch (err) {
-    setMessages((prev) => [
-      ...prev,
-      {
-        role: "assistant",
-        content: "Something went wrong. Please try again.",
-      },
-    ]);
-  } finally {
-    setIsLoading(false);
-  }
-};
+    // NORMAL CHAT
+    const newMessages: Message[] = [...messages, { role: "user", content: currentInput }];
+    setMessages(newMessages);
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: newMessages }),
+      });
+      const data = await res.json();
+      const parsed = typeof data.reply === "string" ? JSON.parse(data.reply) : data.reply;
+      const message = parsed?.message || "Let me help you.";
+
+      setMessages((prev) => [...prev, { role: "assistant", content: message }]);
+      if (parsed?.intent === "BOOK_SESSION") setLeadStep("name");
+      if (messages.length >= 3 && leadStep === "none") {
+        setTimeout(() => {
+          setMessages((prev) => [...prev, { role: "assistant", content: "I can connect you with an accountant. What's your name?" }]);
+          setLeadStep("name");
+        }, 1500);
+      }
+    } catch (err) {
+      setMessages((prev) => [...prev, { role: "assistant", content: "Something went wrong." }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
-
-      {/* CHAT WINDOW */}
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4 font-sans">
       {isOpen && (
-        <div className="bg-white w-[340px] h-[520px] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 min-h-0">
-
-          {/* HEADER (FIXED) */}
-          <div className="flex-none bg-brand-primary p-4 text-white flex justify-between items-center border-b border-black/10">
+        <div className="bg-brand-surface w-80 sm:w-96 h-125 rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-brand-accent/20">
+          
+          {/* HEADER - Uses Brand Primary Purple */}
+          <div className="bg-brand-primary p-4 text-white flex justify-between items-center shadow-md">
             <div>
-              <p className="font-bold text-sm">Alchemy Assistant</p>
-              <p className="text-[10px] opacity-80 uppercase tracking-widest">
-                UK accounting bot
+              <p className="font-bold text-sm tracking-tight">Alchemy Assistant</p>
+              <p className="text-[10px] opacity-90 uppercase tracking-[0.15em] font-semibold">
+                UK Accounting AI
               </p>
             </div>
-
-            <button onClick={() => setIsOpen(false)}>
-              <X size={18} />
+            <button 
+              onClick={() => setIsOpen(false)}
+              className="hover:bg-white/20 p-1 rounded-full transition-colors"
+            >
+              <X size={20} />
             </button>
           </div>
 
-          {/* CHAT BODY (FIXED SCROLL) */}
+          {/* CHAT BODY */}
           <div
             ref={scrollRef}
-            className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3 bg-gray-50"
+            className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#FDFDFD]"
           >
             {messages.map((m, i) => (
-              <div
-                key={i}
-                className={`flex ${
-                  m.role === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
+              <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
-                  className={`p-3 rounded-xl text-sm max-w-[80%] ${
+                  className={`max-w-[85%] p-3 rounded-2xl text-[13px] shadow-sm leading-relaxed ${
                     m.role === "user"
-                      ? "bg-brand-primary text-white"
-                      : "bg-white border border-gray-200"
+                      ? "bg-brand-primary text-white rounded-tr-none"
+                      : "bg-white border border-brand-accent/30 text-brand-text rounded-tl-none"
                   }`}
                 >
                   {m.content}
                 </div>
               </div>
             ))}
-
             {isLoading && (
               <div className="flex justify-start">
-                <Loader2 className="animate-spin text-brand-primary" />
+                <div className="bg-white border border-brand-accent/30 p-3 rounded-2xl rounded-tl-none">
+                  <Loader2 className="animate-spin text-brand-primary" size={16} />
+                </div>
               </div>
             )}
           </div>
 
-          {/* INPUT (FIXED) */}
-          <form
-            onSubmit={handleSubmit}
-            className="flex-none p-3 border-t border-gray-200 flex gap-2 bg-white"
-          >
+          {/* INPUT AREA */}
+          <form onSubmit={handleSubmit} className="p-4 bg-white border-t border-brand-accent/10 flex gap-2">
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="flex-1 p-2 border border-gray-300 rounded-md text-sm outline-none focus:ring-2 focus:ring-brand-primary/30"
-              placeholder="Ask a question..."
+              className="flex-1 p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/50 text-brand-text"
+              placeholder="Ask about VAT, PAYE..."
             />
-
-            <button type="submit" className="bg-brand-primary text-white p-2 rounded-md">
-  <Send size={16} />
-</button>
+            <button 
+              type="submit"
+              className="bg-brand-button hover:opacity-90 text-white p-2.5 rounded-xl transition-all shadow-md active:scale-95"
+            >
+              <Send size={18} />
+            </button>
           </form>
         </div>
       )}
 
-      {/* BOOKING MODAL */}
-      {showBooking && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-xl max-w-sm w-full text-center border border-gray-200">
-
-            <Calendar className="mx-auto mb-3 text-brand-primary" />
-
-            <h2 className="text-brand-primary text-lg mb-2">
-              Book a Consultation
-            </h2>
-
-            <p className="text-sm text-gray-500 mb-4">
-              Speak to an accounting expert.
-            </p>
-
-            <button
-              onClick={triggerBooking}
-              className="bg-brand-primary text-white w-full py-3 rounded-xl font-bold"
-            >
-              Continue to booking
-            </button>
-
-            <button
-              onClick={() => setShowBooking(false)}
-              className="text-xs text-gray-400 mt-3"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* FLOAT BUTTON */}
+      {/* FLOATING ACTION BUTTON - Uses Brand Primary Purple */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-brand-primary text-white p-4 rounded-full shadow-xl border border-white/20"
+        className="bg-brand-primary hover:bg-brand-primary/90 text-white p-4 rounded-full shadow-2xl transition-transform hover:scale-110 active:scale-90"
       >
-        <MessageCircle />
+        {isOpen ? <X size={28} /> : <MessageCircle size={28} />}
       </button>
     </div>
   );

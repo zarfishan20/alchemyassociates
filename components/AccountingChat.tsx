@@ -137,6 +137,12 @@ export default function AccountingChat() {
             ref={scrollRef}
             className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#FDFDFD]"
           >
+
+{/* WARNING */}
+            <div className="bg-yellow-100 border border-yellow-300 text-yellow-800 text-[11px] p-3 rounded-xl">
+              General guidance only. Do not share personal or financial data.
+            </div>
+
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div

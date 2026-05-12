@@ -1,196 +1,121 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
-import { Bookmark, Newspaper } from "lucide-react";
-
-type Category = "All" | "HMRC" | "VAT" | "Payroll" | "Business";
+import { useEffect, useState } from "react";
+import { Bookmark, Newspaper, ExternalLink } from "lucide-react";
 
 type NewsItem = {
   title: string;
   url: string;
-  urlToImage?: string | null;
-  source: { name: string };
-  category?: string;
-  impact?: "LOW" | "MEDIUM" | "HIGH";
+  source: string; // ✅ FIXED TYPE
+  publishedAt?: string;
   summary?: string;
 };
 
-const filters: Category[] = ["All", "HMRC", "VAT", "Payroll", "Business"];
-
 export default function NewsPage() {
   const [news, setNews] = useState<NewsItem[]>([]);
-  const [activeFilter, setActiveFilter] = useState<Category>("All");
-const [bookmarks, setBookmarks] = useState<string[]>(() => {
-  if (typeof window === "undefined") return [];
+  const [bookmarks, setBookmarks] = useState<string[]>([]);
 
-  try {
-    const saved = localStorage.getItem("bookmarks");
-    return saved ? JSON.parse(saved) : [];
-  } catch {
-    return [];
-  }
-});
-
-  // Fetch news
+  // FETCH HMRC RSS
   useEffect(() => {
-    fetch("/api/tax-news")
+    fetch("/api/hmrc-feed")
       .then((res) => res.json())
-      .then(setNews)
+      .then((data) => setNews(Array.isArray(data) ? data : []))
       .catch(() => setNews([]));
   }, []);
 
-  // Load bookmarks safely (SSR-safe)
-
-
+  // BOOKMARK TOGGLE
   const toggleBookmark = (url: string) => {
-    setBookmarks((prev) => {
-      const updated = prev.includes(url)
+    setBookmarks((prev) =>
+      prev.includes(url)
         ? prev.filter((b) => b !== url)
-        : [...prev, url];
-
-      localStorage.setItem("bookmarks", JSON.stringify(updated));
-      return updated;
-    });
+        : [...prev, url]
+    );
   };
 
-  // Filtered news
-  const filtered = useMemo(() => {
-    if (activeFilter === "All") return news;
-    return news.filter((n) => n.category === activeFilter);
-  }, [news, activeFilter]);
-
   return (
-    <main className="min-h-screen bg-brand-surface pb-20">
+    <main className="min-h-screen bg-gray-50 pb-20">
 
       {/* HEADER */}
-      <section className="bg-brand-primary pt-32 pb-20 px-6 text-center">
+      <section className="bg-brand-logo text-white pt-28 pb-14 text-center px-6">
         <div className="max-w-3xl mx-auto">
 
-          <div className="inline-flex items-center gap-2 bg-white/10 text-white px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-6">
-            <Newspaper size={12} /> Resource Hub
+          <div className="inline-flex items-center gap-2 bg-white/10 px-4 py-1 rounded-full text-xs font-bold">
+            <Newspaper size={14} /> HMRC Live Intelligence Feed
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-black text-white mb-4">
-            Latest UK Tax <span className="text-brand-accent">&</span> Business News
+          <h1 className="text-4xl font-black mt-6">
+            UK HMRC Tax Updates
           </h1>
 
-          <p className="text-white/70 text-sm">
-            Real-time HMRC & UK business updates
+          <p className="text-white/70 mt-2 text-sm">
+            Live GOV.UK HMRC announcements & tax changes
           </p>
-
-          {/* FILTERS */}
-          <div className="flex gap-2 mt-6 flex-wrap justify-center">
-            {filters.map((f) => (
-              <button
-                key={f}
-                onClick={() => setActiveFilter(f)}
-                className={`px-4 py-2 rounded-full text-sm font-bold transition
-                  ${
-                    activeFilter === f
-                      ? "bg-black text-white"
-                      : "bg-white border"
-                  }`}
-              >
-                {f}
-              </button>
-            ))}
-          </div>
 
         </div>
       </section>
 
       {/* NEWS GRID */}
-      <section className="max-w-7xl mx-auto px-6 -mt-10">
+      <section className="max-w-6xl mx-auto px-6 mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
 
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+        {news.map((item, i) => (
+          <div
+            key={i}
+            className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition p-5 flex flex-col justify-between"
+          >
 
-          {filtered.map((item, i) => (
-            <div
-              key={i}
-              className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition"
-            >
+            {/* SOURCE */}
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+              {item.source}
+            </span>
 
-              {/* IMAGE */}
-              <div className="relative h-48 bg-gray-100">
-                {item.urlToImage && (
-                  <Image
-                    src={item.urlToImage}
-                    alt={item.title}
-                    fill
-                    className="object-cover"
-                    unoptimized
-                  />
-                )}
+            {/* TITLE */}
+           <h2 className="font-black mt-2 text-lg text-brand-logo line-clamp-3">
+              {item.title}
+            </h2>
 
-                {/* BOOKMARK */}
-                <button
-                  onClick={() => toggleBookmark(item.url)}
-                  className="absolute top-3 right-3 bg-white p-2 rounded-full shadow"
-                >
-                  <Bookmark
-                    size={16}
-                    fill={bookmarks.includes(item.url) ? "black" : "none"}
-                  />
-                </button>
-              </div>
+            {/* SUMMARY */}
+            {item.summary && (
+              <p className="text-sm text-gray-600 mt-2 line-clamp-3">
+                {item.summary}
+              </p>
+            )}
 
-         {/* CONTENT */}
-<div className="p-5">
+            {/* DATE */}
+            {item.publishedAt && (
+              <p className="text-xs text-gray-400 mt-2">
+                {new Date(item.publishedAt).toLocaleDateString()}
+              </p>
+            )}
 
-  {/* TOP ROW */}
-  <div className="flex justify-between items-center">
+            {/* FOOTER */}
+            <div className="flex items-center justify-between mt-5">
 
-    <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">
-      {item.source.name} • {item.category}
-    </span>
+              {/* BOOKMARK */}
+              <button
+                onClick={() => toggleBookmark(item.url)}
+                className="bg-gray-100 p-2 rounded-full"
+              >
+                <Bookmark
+                  size={16}
+                  fill={bookmarks.includes(item.url) ? "black" : "none"}
+                />
+              </button>
 
-    {/* IMPACT BADGE */}
-    <span
-      className={`text-[10px] font-black px-2 py-1 rounded-full
-        ${
-          item.impact === "HIGH"
-            ? "bg-red-100 text-red-600"
-            : item.impact === "MEDIUM"
-            ? "bg-yellow-100 text-yellow-600"
-            : "bg-green-100 text-green-600"
-        }`}
-    >
-      {item.impact || "LOW"}
-    </span>
-
-  </div>
-
-  {/* TITLE */}
-  <h2 className="text-lg font-black mt-2 line-clamp-2">
-    {item.title}
-  </h2>
-
-  {/* AI SUMMARY */}
-  <p className="text-sm text-gray-600 mt-2">
-    🤖 {item.summary}
-  </p>
-
-  {/* CTA */}
-  <a
-    href={item.url}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="inline-block mt-4 text-sm font-bold underline"
-  >
-    Read full article
-  </a>
-
-</div>
-
-
-
-
+              {/* LINK */}
+              <a
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-sm text-brand-button font-bold underline"
+              >
+                Read <ExternalLink size={14} />
+              </a>
 
             </div>
-          ))}
 
-        </div>
+          </div>
+        ))}
+
       </section>
     </main>
   );

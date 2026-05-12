@@ -91,15 +91,15 @@ export default function ContactPage() {
         <div className="relative z-10 max-w-4xl mx-auto px-6">
           <motion.h1
             variants={fadeUp(0.2)}
-            className="text-4xl md:text-6xl font-black text-brand-text uppercase tracking-tight"
+            className="text-4xl md:text-6xl font-black text-brand-primary uppercase tracking-tight"
           >
             Book Your <br />
-            <span className="text-brand-primary">Accountant</span>
+            <span className="text-brand-halfheading">Accountant</span>
           </motion.h1>
 
           <motion.p
             variants={fadeUp(0.4)}
-            className="mt-6 text-brand-text/60 max-w-xl mx-auto"
+            className="mt-6 text-brand-muted/60 max-w-xl mx-auto"
           >
             Speak directly with a UK-qualified accountant.
             Get clarity on VAT, PAYE, tax & compliance in 30 minutes.
@@ -117,18 +117,18 @@ export default function ContactPage() {
         >
           {/* HEADER */}
           <div className="mb-6 border-b pb-4">
-            <h2 className="text-sm font-black uppercase tracking-widest flex items-center gap-2">
+            <h2 className="text-sm font-black uppercase tracking-widest flex items-center gap-2 text-brand-primary">
               <Calendar size={14} className="text-brand-primary" />
               Book Consultation (Free 30 Min Call)
             </h2>
 
-            <p className="text-sm text-brand-text/60 mt-2">
+            <p className="text-sm text-brand-primary/60 mt-2">
               Limited weekly availability — secure your slot below.
             </p>
           </div>
 
           {/* CAL.COM */}
-          <div className="rounded-2xl overflow-hidden border min-h-125">
+         <div className="rounded-2xl overflow-hidden border border-muted/20 bg-surface min-h-125">
             {isMounted && (
               <Cal
                 namespace="website-consultation"
@@ -164,8 +164,8 @@ export default function ContactPage() {
         <div className="bg-white border p-8 rounded-3xl flex gap-4 items-center">
           <Mail className="text-brand-primary" />
           <div>
-            <p className="text-xs uppercase text-brand-text/50">Email</p>
-            <p className="text-xl font-bold text-brand-text">
+            <p className="text-xs uppercase text-brand-primary/50">Email</p>
+            <p className="text-xl font-bold text-brand-primary">
               info@mandmaccountsandtaxation.com
             </p>
           </div>

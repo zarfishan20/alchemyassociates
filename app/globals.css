@@ -104,3 +104,14 @@ body {
   width: 100% !important;
   float: none !important;
 }
+
+
+/* Target Cal iframe container */
+iframe {
+  border-radius: 1rem;
+}
+
+/* Optional: soften background around it */
+.cal-wrapper {
+  background: var(--color-surface);
+}

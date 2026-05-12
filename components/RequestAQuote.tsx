@@ -114,10 +114,10 @@ export default function RequestAQuote() {
                   {...register("revenue")}
                   className="w-full p-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-primary outline-none text-brand-text"
                 >
-                  <option>Under $100k</option>
-                  <option>$100k - $500k</option>
-                  <option>$500k - $1M</option>
-                  <option>$1M+</option>
+                  <option>Under £100k</option>
+                  <option>£100k - £500k</option>
+                  <option>£500k - £1M</option>
+                  <option>£1M+</option>
                 </select>
               </div>
               <div className="flex gap-4">

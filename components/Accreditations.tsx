@@ -34,7 +34,7 @@ export default function Accreditations({ logos }: AccreditationsProps) {
         </div>
         {/* --- END HEADER UI --- */}
 
-          <div className="flex flex-wrap justify-center items-center gap-12">
+          <div className="flex flex-wrap justify-center items-center gap-50">
           
           {logos.map((logo, i) => (
             <div

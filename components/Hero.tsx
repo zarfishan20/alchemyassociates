@@ -51,7 +51,7 @@ export default function Hero() {
             className="text-4xl md:text-5xl font-black text-brand-primary mb-6 leading-tight"
           >
             
-Chartered Accountants <span className="text-brand-button italic">in Chadwell Heath </span>
+Chartered Certified Accountants <span className="text-brand-button italic">in Chadwell Heath </span>
           </motion.h1>
 
           {/* Subtext - Fades up */}

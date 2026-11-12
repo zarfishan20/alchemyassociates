@@ -7,7 +7,7 @@ export default function ROICalculator() {
   const [turnover, setTurnover] = useState(100000);
   const [animatedValue, setAnimatedValue] = useState(0);
 
-  // FlexiPay Context: 3% operational efficiency + 150 hours saved @ £60/hr
+  // Illustrative assumptions: 3% operational efficiency + 150 hours saved @ £60/hr
   const totalValue = turnover * 0.03 + 150 * 60;
 
   // Animate totalValue whenever turnover changes

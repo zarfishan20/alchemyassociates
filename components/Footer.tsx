@@ -1,4 +1,4 @@
-import { Mail, MapPin, ExternalLink, Phone } from 'lucide-react'; 
+import { Mail, MapPin, ExternalLink, Phone, Lock } from 'lucide-react'; 
 import Link from 'next/link';
 
 export default function Footer() {
@@ -56,6 +56,16 @@ export default function Footer() {
               <span>Technical Maintenance</span> <span>Sun 02:00 AM</span>
             </li>
           </ul>
+          <Link
+            href="https://login.xero.com/identity/user/login"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-7 inline-flex items-center gap-2 rounded-full border border-brand-subheading/50 px-5 py-3 text-sm font-bold text-white transition-colors hover:border-brand-subheading hover:bg-brand-subheading/15 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-subheading"
+          >
+            <Lock size={15} />
+            Client portal login
+            <ExternalLink size={13} />
+          </Link>
         </div>
       </div>
 

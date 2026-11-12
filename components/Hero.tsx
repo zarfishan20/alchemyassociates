@@ -91,16 +91,14 @@ export default function Hero() {
               className="object-cover object-top"
             />
           </div>
-          <div className="absolute -bottom-5 left-0 z-20 rounded-2xl border border-brand-primary/10 bg-white px-6 py-5 shadow-xl">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-subheading">
-              Visit our office
+          <div className="absolute -bottom-5 left-0 z-20 max-w-[calc(100%-1rem)] rounded-2xl border border-brand-primary/10 bg-white px-6 py-5 shadow-xl">
+            <p className="text-base font-semibold italic leading-relaxed text-brand-primary">
+              “We build systems that give UK founders their time back.”
             </p>
-            <p className="mt-2 text-base font-bold text-brand-primary">
-              4 Wangey Road
+            <p className="mt-3 text-xs font-bold uppercase tracking-[0.14em] text-brand-subheading">
+              Shahid Shah
             </p>
-            <p className="text-sm text-brand-text/65">
-              Chadwell Heath, Romford · RM6 4DD
-            </p>
+            <p className="text-sm text-brand-text/65">Founder, Alchemy Associates</p>
           </div>
         </motion.div>
       </div>

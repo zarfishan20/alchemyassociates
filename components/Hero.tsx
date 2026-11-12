@@ -1,137 +1,108 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Quote } from "lucide-react";
-import Image from "next/image"; 
+import Image from "next/image";
 import Link from "next/link";
-// Import your animation variants
 import { slideIn, fadeUp, staggerContainer } from "@/lib/animations";
 
 export default function Hero() {
   return (
-    <motion.section 
-      // 1. Initialize the stagger orchestration
+    <motion.section
       variants={staggerContainer}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true }}
-      className="relative w-full min-h-[90vh] flex items-center overflow-hidden bg-brand-surface"
+      className="relative flex min-h-[85vh] w-full items-center overflow-hidden bg-brand-surface"
     >
-      
-      {/* --- Background --- */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      <div className="pointer-events-none absolute inset-0 z-0">
         <Image
-          src="/london-bg.jpg" 
-          alt="London Cityscape"
+          src="/london-bg.jpg"
+          alt="London cityscape"
           fill
           priority
-          className="object-cover object-center opacity-60 mix-blend-luminosity" 
+          className="object-cover object-center opacity-35 mix-blend-luminosity"
         />
-        <div 
-          className="absolute inset-0" 
-          style={{ background: "linear-gradient(135deg, rgba(249, 248, 244, 0.1) 0%, #F9F8F4 80%)" }}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(110deg, rgba(247,246,242,0.98) 0%, rgba(247,246,242,0.92) 48%, rgba(247,246,242,0.35) 100%)",
+          }}
         />
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-16 items-center">
-        
-        {/* --- LEFT: Text --- */}
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-14 px-6 py-24 md:grid-cols-2">
         <div>
-          {/* Tagline - Slides in from left */}
-          <motion.span 
+          <motion.span
             variants={slideIn("left", 0.1)}
-            className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary mb-6 block"
+            className="mb-6 block text-xs font-bold uppercase tracking-[0.24em] text-brand-subheading"
           >
-          Alchemy Associates
+            Alchemy Associates · Chadwell Heath
           </motion.span>
 
-          {/* Headline - Slides in from left with slight delay */}
-          <motion.h1 
+          <motion.h1
             variants={slideIn("left", 0.2)}
-            className="text-4xl md:text-5xl font-black text-brand-primary mb-6 leading-tight"
+            className="mb-6 max-w-2xl text-4xl font-bold leading-[1.08] tracking-tight text-brand-primary md:text-6xl"
           >
-            
-Chartered Certified Accountants <span className="text-brand-button italic">in Chadwell Heath </span>
+            Accountants in{" "}
+            <span className="text-brand-button">Chadwell Heath</span>
+            <span className="block">for people and businesses.</span>
           </motion.h1>
 
-          {/* Subtext - Fades up */}
-          <motion.p 
+          <motion.p
             variants={fadeUp(0.3)}
-            className="text-lg text-brand-text/70 mb-10 max-w-md leading-relaxed font-medium"
+            className="mb-10 max-w-xl text-lg leading-8 text-brand-text/75"
           >
-         
-From self-assessments to corporate tax planning, Alchemy Associates provides the local expertise you can trust in Chadwell Heath.
-</motion.p>
+            Practical support with accounts, bookkeeping, tax returns, VAT and
+            payroll — with a local team based in Chadwell Heath, Romford.
+          </motion.p>
 
-          {/* CTA Buttons - Fades up slightly later */}
-  <motion.div
+          <motion.div
             variants={fadeUp(0.4)}
-            className="flex flex-col sm:flex-row gap-5"
+            className="flex flex-col gap-4 sm:flex-row"
           >
-            {/* PRIMARY */}
             <Link
               href="/booking"
-              className="bg-brand-button text-white px-10 py-4 rounded-full font-bold text-sm uppercase tracking-widest shadow-lg shadow-brand-text/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl active:scale-95 flex items-center justify-center"
+              className="flex items-center justify-center rounded-full bg-brand-button px-8 py-4 text-sm font-bold text-white shadow-lg shadow-brand-primary/15 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-primary"
             >
-              Book Free Consultation
+              Book a consultation
             </Link>
-
-            {/* SECONDARY */}
             <Link
               href="/quote"
-              className="bg-white text-brand-primary border border-brand-text/20 px-10 py-4 rounded-full font-bold text-sm uppercase tracking-widest transition-all duration-300 hover:bg-brand-primary hover:text-white hover:border-brand-primary hover:-translate-y-1 active:scale-95 flex items-center justify-center"
+              className="flex items-center justify-center rounded-full border border-brand-primary/20 bg-white px-8 py-4 text-sm font-bold text-brand-primary transition-all duration-300 hover:-translate-y-1 hover:border-brand-primary hover:bg-brand-primary hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-primary"
             >
-              Request a Quote
+              Request a quote
             </Link>
           </motion.div>
         </div>
 
-        {/* --- RIGHT: Founder Visual --- */}
-        <motion.div 
-          // 2. Slide the whole image container from the right
-          variants={slideIn("right", 0.4)}
-          className="hidden md:flex relative h-162.5 items-end justify-center group overflow-visible"
+        <motion.div
+          variants={slideIn("right", 0.35)}
+          className="relative mx-auto hidden h-[560px] w-full max-w-md items-end justify-center md:flex"
         >
-          <div className="relative w-full max-w-sm h-full flex items-end justify-center">
-
-            {/* Background Card */}
-            <div className="absolute inset-x-0 bottom-0 top-[25%] rounded-[3.5rem] shadow-2xl shadow-brand-primary/20 transform group-hover:scale-[1.02] transition-transform duration-700 ease-out z-0 bg-white/50" />
-
-            {/* Floating Image */}
-            <div className="relative z-20 w-full h-125 flex items-end justify-center pointer-events-none overflow-hidden rounded-3xl">
-              <Image 
-                src="/founder.jpg" 
-                alt="Shahid Shah- Founder"
-                width={600}
-                height={750}
-                priority
-                className="
-                  w-auto h-[115%] object-cover object-bottom
-                  transition-all duration-700 ease-out 
-                  group-hover:scale-105 group-hover:-translate-y-3
-                  group-hover:drop-shadow-[0_20px_40px_rgba(0,0,0,0.25)]
-                "
-              />
-            </div>
-
-            {/* Quote Box - Fades up specifically within this group */}
-            <motion.div 
-              variants={fadeUp(0.7)}
-              className="absolute bottom-12 -left-6 -right-6 z-30 bg-brand-text p-7 rounded-[2.5rem] shadow-2xl border border-white/5"
-            >
-              <Quote className="text-brand-primary mb-3" size={24} fill="currentColor" />
-              <p className="text-brand-surface text-[15px] font-medium leading-relaxed italic mb-4">
-                &quot;We build systems that give UK founders their time back.&quot;
-              </p>
-              <div className="flex flex-col text-[10px] font-black uppercase text-brand-primary tracking-widest">
-                <span>Shahid Shah</span>
-                <span className="text-white/40">Founder, Alchemy Assoicates</span>
-              </div>
-            </motion.div>
-
+          <div className="absolute inset-x-4 bottom-0 top-20 rounded-[2rem] border border-white/60 bg-white/50 shadow-2xl shadow-brand-primary/10 backdrop-blur-sm" />
+          <div className="relative z-10 h-[500px] w-full overflow-hidden rounded-[1.75rem]">
+            <Image
+              src="/founder.jpg"
+              alt="Shahid Shah of Alchemy Associates"
+              fill
+              priority
+              sizes="(min-width: 768px) 400px, 100vw"
+              className="object-cover object-top"
+            />
+          </div>
+          <div className="absolute -bottom-5 left-0 z-20 rounded-2xl border border-brand-primary/10 bg-white px-6 py-5 shadow-xl">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-subheading">
+              Visit our office
+            </p>
+            <p className="mt-2 text-base font-bold text-brand-primary">
+              4 Wangey Road
+            </p>
+            <p className="text-sm text-brand-text/65">
+              Chadwell Heath, Romford · RM6 4DD
+            </p>
           </div>
         </motion.div>
-
       </div>
     </motion.section>
   );

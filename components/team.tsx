@@ -1,62 +1,89 @@
-const commitments = [
+const teamMembers = [
   {
-    number: "01",
-    title: "Clear explanations",
-    description:
-      "Understand your accounts, tax responsibilities and next steps without unnecessary jargon.",
+    initials: "SS",
+    name: "Shahid Shah",
+    role: "Founder",
+    bio: "Helping individuals and UK businesses make clearer, more confident decisions about their finances.",
+    featured: true,
   },
   {
-    number: "02",
-    title: "Practical support",
-    description:
-      "Get help with the day-to-day accounting, tax, VAT and payroll tasks that keep your finances organised.",
+    initials: "TM",
+    name: "Team Member 02",
+    role: "Accounts & Client Support",
+    bio: "Placeholder profile — replace with this team member’s introduction, experience and areas of expertise.",
+    featured: false,
   },
   {
-    number: "03",
-    title: "A local point of contact",
-    description:
-      "Speak to an accountancy practice based at 4 Wangey Road, Chadwell Heath, serving individuals and businesses.",
+    initials: "TM",
+    name: "Team Member 03",
+    role: "Tax & Payroll Support",
+    bio: "Placeholder profile — replace with this team member’s introduction, experience and areas of expertise.",
+    featured: false,
   },
 ];
 
 export default function TeamSection() {
   return (
-    <section className="bg-white py-20 md:py-28" aria-labelledby="approach-heading">
+    <section
+      className="bg-white py-20 md:py-28"
+      aria-labelledby="team-heading"
+    >
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto mb-14 max-w-2xl text-center">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-brand-subheading">
-            The Alchemy approach
+            The people behind Alchemy
           </p>
           <h2
-            id="approach-heading"
+            id="team-heading"
             className="mt-4 text-3xl font-bold tracking-tight text-brand-text md:text-5xl"
           >
-            Accountancy that makes the next step clearer.
+            Meet the team.
           </h2>
           <p className="mt-5 text-base leading-7 text-brand-text/70">
-            Straightforward support for the financial and compliance work behind
-            running a business or managing your personal tax affairs.
+            Approachable people, practical advice and personal support for
+            every stage of your financial journey.
           </p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {commitments.map((item) => (
+          {teamMembers.map((member) => (
             <article
-              key={item.number}
-              className="rounded-2xl border border-brand-primary/10 bg-brand-surface p-8"
+              key={member.name}
+              className={`group overflow-hidden rounded-2xl border bg-brand-surface transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-primary/10 ${
+                member.featured
+                  ? "border-brand-primary/30"
+                  : "border-brand-primary/10"
+              }`}
             >
-              <p className="text-sm font-bold tracking-widest text-brand-subheading">
-                {item.number}
-              </p>
-              <h3 className="mt-5 text-xl font-bold text-brand-text">
-                {item.title}
-              </h3>
-              <p className="mt-3 leading-7 text-brand-text/70">
-                {item.description}
-              </p>
+              <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-gradient-to-br from-brand-primary/15 via-brand-surface to-brand-subheading/15">
+                <div className="absolute inset-x-8 bottom-0 h-2/3 rounded-t-full bg-brand-primary/5" />
+                <div className="relative flex h-28 w-28 items-center justify-center rounded-full border-4 border-white bg-brand-primary text-3xl font-semibold tracking-wide text-white shadow-lg shadow-brand-primary/15">
+                  {member.initials}
+                </div>
+                <span className="absolute bottom-4 left-4 rounded-full border border-white/70 bg-white/85 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-text/60 backdrop-blur">
+                  {member.featured ? "Leadership" : "Team"}
+                </span>
+              </div>
+
+              <div className="p-7 md:p-8">
+                <h3 className="text-xl font-bold text-brand-text">
+                  {member.name}
+                </h3>
+                <p className="mt-1 text-sm font-semibold text-brand-subheading">
+                  {member.role}
+                </p>
+                <p className="mt-4 text-sm leading-7 text-brand-text/70">
+                  {member.bio}
+                </p>
+              </div>
             </article>
           ))}
         </div>
+
+        <p className="mt-8 text-center text-xs text-brand-text/45">
+          Team profiles are placeholders and will be updated with final
+          biographies and photographs.
+        </p>
       </div>
     </section>
   );

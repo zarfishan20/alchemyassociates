@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ChevronDown, Menu, X, Lock } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -101,15 +101,7 @@ export default function Header() {
             )}
           </div>
 
-          {/* DESKTOP LOGIN BUTTON */}
-          <Link
-            href="https://login.xero.com/identity/user/login"
-            target="_blank"
-            className="flex items-center gap-2 bg-(--color-brand-button) text-white px-6 py-2.5 rounded-full text-xs font-bold transition-all duration-200 hover:bg-(--color-brand-primary) hover:scale-105 active:scale-95 shadow-sm"
-          >
-            <Lock size={12} />
-            Portal
-          </Link>
+
         </div>
 
         {/* MOBILE BUTTON */}
@@ -170,18 +162,7 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Mobile Portal Action Link */}
-            <div className="pt-2">
-              <Link
-                href="https://login.xero.com/identity/user/login"
-                target="_blank"
-                className="flex items-center justify-center gap-2 bg-(--color-brand-button) text-white p-4 rounded-xl font-bold w-full transition-all duration-200 hover:bg-(--color-brand-primary) hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-slate-200"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <Lock size={16} />
-                Portal Login
-              </Link>
-            </div>
+
 
           </div>
         </div>

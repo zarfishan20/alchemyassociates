@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className="bg-brand-text text-brand-surface pt-20 pb-8">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-16 mb-16">
         
-        {/* FlexiPay Branding */}
+        {/* Alchemy Associates branding */}
         <div>
           <h3 className="text-brand-primary font-black text-xl mb-6 tracking-tighter uppercase">
             Alchemy<span className="text-brand-subheading/50">Associates</span>

@@ -60,7 +60,7 @@ export default function ContactPage() {
             formId: "15e148d2-417a-4481-b45c-d15533c1c205",
             target: "#hubspot-form-container",
             css: "",
-            cssClass: "flexipay-custom-form",
+            cssClass: "alchemy-associates-custom-form",
           });
           formInitialized.current = true;
         }

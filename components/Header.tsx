@@ -58,7 +58,7 @@ export default function Header() {
               Alchemy Associates
             </span>
             <span className="block text-(--color-brand-subheading) font-medium text-[11px] md:text-xs tracking-wide">
-              Chartered Certified Accountants
+              Accountancy • Tax • Payroll
             </span>
           </div>
         </Link>

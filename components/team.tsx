@@ -1,69 +1,60 @@
-import Image from 'next/image';
-
-const team = [
+const commitments = [
   {
-    name: "Sarah Jenkins",
-    role: "Lead Strategist",
-    image: "/founder.jpg",
+    number: "01",
+    title: "Clear explanations",
+    description:
+      "Understand your accounts, tax responsibilities and next steps without unnecessary jargon.",
   },
   {
-    name: "Marcus Chen",
-    role: "Head of Product",
-    image: "/founder.jpg",
+    number: "02",
+    title: "Practical support",
+    description:
+      "Get help with the day-to-day accounting, tax, VAT and payroll tasks that keep your finances organised.",
   },
   {
-    name: "Elena Rodriguez",
-    role: "Creative Director",
-    image: "/founder.jpg",
+    number: "03",
+    title: "A local point of contact",
+    description:
+      "Speak to an accountancy practice based at 4 Wangey Road, Chadwell Heath, serving individuals and businesses.",
   },
 ];
 
 export default function TeamSection() {
   return (
-    <section className="py-20 bg-brand-surface">
-      <div className="container mx-auto px-6">
-        {/* Header Section */}
-        <div className="mb-16 text-center">
-          <span className="text-sm font-bold uppercase tracking-widest text-brand-subheading">
-            The Experts
-          </span>
-          <h2 className="mt-3 text-4xl font-bold text-brand-halfheading md:text-5xl">
-            Meet our <span className="text-brand-primary">Team</span>
+    <section className="bg-white py-20 md:py-28" aria-labelledby="approach-heading">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto mb-14 max-w-2xl text-center">
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-brand-subheading">
+            The Alchemy approach
+          </p>
+          <h2
+            id="approach-heading"
+            className="mt-4 text-3xl font-bold tracking-tight text-brand-text md:text-5xl"
+          >
+            Accountancy that makes the next step clearer.
           </h2>
-          <div className="mt-4 h-1 w-20 bg-brand-button mx-auto rounded-full" />
+          <p className="mt-5 text-base leading-7 text-brand-text/70">
+            Straightforward support for the financial and compliance work behind
+            running a business or managing your personal tax affairs.
+          </p>
         </div>
 
-        {/* Team Grid */}
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
-          {team.map((member) => (
-            <div key={member.name} className="group relative">
-              {/* Image Container with Custom Accent Border */}
-              <div className="relative aspect-square overflow-hidden rounded-2xl border-2 border-transparent transition-all duration-300 group-hover:border-brand-grey">
-                <Image
-                  src={member.image}
-                  alt={member.name}
-                  fill
-                  className="grayscale hover:grayscale-0 object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                {/* Subtle Overlay on Hover */}
-                <div className="absolute inset-0 bg-brand-primary/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              </div>
-
-              {/* Text Content */}
-              <div className="mt-6 text-center">
-                <h3 className="text-xl font-bold text-brand-text">
-                  {member.name}
-                </h3>
-                <p className="font-medium text-brand-subheading">
-                  {member.role}
-                </p>
-                
-                {/* Social Placeholder Line */}
-                <div className="mt-4 flex justify-center gap-4 text-brand-muted opacity-0 transition-all duration-300 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
-                   <div className="h-1 w-8 bg-brand-accent/30 rounded" />
-                </div>
-              </div>
-            </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          {commitments.map((item) => (
+            <article
+              key={item.number}
+              className="rounded-2xl border border-brand-primary/10 bg-brand-surface p-8"
+            >
+              <p className="text-sm font-bold tracking-widest text-brand-subheading">
+                {item.number}
+              </p>
+              <h3 className="mt-5 text-xl font-bold text-brand-text">
+                {item.title}
+              </h3>
+              <p className="mt-3 leading-7 text-brand-text/70">
+                {item.description}
+              </p>
+            </article>
           ))}
         </div>
       </div>

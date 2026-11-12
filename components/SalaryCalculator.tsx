@@ -112,7 +112,7 @@ export default function SalaryCalculator() {
               <Wallet size={14} /> System Insight
             </div>
             <p className="text-sm leading-relaxed text-white/80">
-              FlexiPay automation ensures your first <span className="text-white font-bold">£12,570</span> is optimized. 
+              Alchemy Associates helps you make the most of your first <span className="text-white font-bold">£12,570</span> is optimized. 
               Our systems automatically flag Dividend/Salary splits for maximum efficiency.
             </p>
             <button className="mt-6 text-[10px] flex items-center gap-1 font-bold text-brand-primary hover:text-white transition-colors uppercase">

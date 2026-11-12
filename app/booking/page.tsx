@@ -56,7 +56,7 @@ export default function ContactPage() {
             portalId: "148029377",
             formId: "15e148d2-417a-4481-b45c-d15533c1c205",
             target: "#hubspot-form-container",
-            cssClass: "flexipay-custom-form",
+            cssClass: "alchemy-associates-custom-form",
           });
 
           formInitialized.current = true;

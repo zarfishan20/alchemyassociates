@@ -25,7 +25,8 @@ const teamMembers = [
 export default function TeamSection() {
   return (
     <section
-      className="bg-white py-20 md:py-28"
+      id="team"
+      className="scroll-mt-24 bg-white py-20 md:py-28"
       aria-labelledby="team-heading"
     >
       <div className="mx-auto max-w-7xl px-6">
